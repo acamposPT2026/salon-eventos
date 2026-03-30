@@ -288,7 +288,7 @@
           </div>
 
           <div class="field">
-            <label for="telefono">Teléfono</label>
+            <label for="telefono">Teléfono <span style="font-weight:300;opacity:0.45;text-transform:none;letter-spacing:0">(opcional)</span></label>
             <div class="input-wrap" id="wrapTelefono">
               <input type="tel" id="telefono" name="telefono" placeholder="+506 8888-8888" autocomplete="tel" />
               <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -450,7 +450,8 @@
 
     inpTelefono.addEventListener('blur', () => {
       const v = inpTelefono.value.trim();
-      if (!v || !isValidPhone(v)) { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); return; }
+      if (!v) { state(inpTelefono,null); hint(hintTelefono,'info',''); return; }
+      if (!isValidPhone(v)) { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); return; }
       state(inpTelefono,'valid'); hint(hintTelefono,'ok','');
     });
 
@@ -485,7 +486,7 @@
       let err = false;
       if (!nombre || nombre.length < 3) { state(inpNombre,'invalid'); hint(hintNombre,'err','Ingresa tu nombre completo.'); err = true; }
       if (!isValidFormat(email))        { state(inpEmail,'invalid');  hint(hintEmail,'err','Ingresa un correo válido.');    err = true; }
-      if (!isValidPhone(telefono))      { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); err = true; }
+      if (telefono && !isValidPhone(telefono)) { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); err = true; }
       if (err) return;
 
       // UI loading
