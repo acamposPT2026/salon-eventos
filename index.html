@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bienvenido — Salón de Eventos Parque Tempisque</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1a4a2e;
+      --green-mid:   #2d6b47;
+      --gold:        #c9a84c;
+      --white:       #ffffff;
+      --radius:      6px;
+      --transition:  0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: var(--green-dark);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    .bg-layer {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(45,107,71,0.55) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 90%, rgba(201,168,76,0.12) 0%, transparent 55%),
+        linear-gradient(160deg, #0f2d1a 0%, #1a4a2e 45%, #112510 100%);
+    }
+    .bg-noise {
+      position: fixed; inset: 0; z-index: 1; opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .bg-lines {
+      position: fixed; inset: 0; z-index: 1; opacity: 0.04;
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.8) 40px);
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      width: 100%; max-width: 440px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.22);
+      border-radius: 16px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 2.8rem 2.4rem 2.4rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 32px 80px rgba(0,0,0,0.45), 0 0 60px rgba(201,168,76,0.06);
+      animation: cardIn 0.7s cubic-bezier(0.2,0.8,0.2,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(28px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .logo-wrap { display: flex; justify-content: center; margin-bottom: 1.6rem; }
+    .logo-wrap img {
+      height: 52px; width: auto;
+      
+    }
+
+    .eyebrow {
+      text-align: center;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+      opacity: 0; animation: fadeUp 0.5s 0.3s both;
+    }
+    .title {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.95rem; font-weight: 300; line-height: 1.2;
+      margin-bottom: 0.4rem;
+      opacity: 0; animation: fadeUp 0.5s 0.4s both;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 0.82rem; color: rgba(255,255,255,0.5);
+      line-height: 1.5; margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.5s 0.5s both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1.6rem;
+      opacity: 0; animation: fadeUp 0.5s 0.55s both;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent);
+    }
+    .divider span {
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(201,168,76,0.6);
+      white-space: nowrap;
+    }
+
+    .form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .field { display: flex; flex-direction: column; gap: 0.35rem; opacity: 0; animation: fadeUp 0.5s both; }
+    .field:nth-child(1) { animation-delay: 0.6s; }
+    .field:nth-child(2) { animation-delay: 0.68s; }
+    .field:nth-child(3) { animation-delay: 0.76s; }
+
+    .field label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .input-wrap { position: relative; }
+    .input-wrap svg {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      width: 15px; height: 15px; stroke: rgba(255,255,255,0.3);
+      pointer-events: none; transition: stroke var(--transition);
+    }
+
+    input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem; font-weight: 300;
+      padding: 0.75rem 0.9rem 0.75rem 2.4rem;
+      outline: none;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+    }
+    input::placeholder { color: rgba(255,255,255,0.25); }
+    input:focus {
+      border-color: rgba(201,168,76,0.55);
+      background: rgba(255,255,255,0.09);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    .input-wrap:focus-within svg { stroke: rgba(201,168,76,0.7); }
+    input.valid   { border-color: rgba(46,184,92,0.6); }
+    input.invalid { border-color: rgba(192,57,43,0.6); }
+
+    /* Spinner dentro del input para verificación */
+    .input-checking::after {
+      content: '';
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 14px; height: 14px;
+      border: 2px solid rgba(201,168,76,0.3);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .hint {
+      font-size: 0.72rem; min-height: 1.1rem;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .hint.ok   { color: #5edb8a; }
+    .hint.err  { color: #e87c7c; }
+    .hint.info { color: rgba(255,255,255,0.35); }
+
+    .btn-wrap { margin-top: 0.5rem; opacity: 0; animation: fadeUp 0.5s 0.85s both; }
+    button[type="submit"] {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, #a8842e 100%);
+      border: none; border-radius: var(--radius);
+      color: #1a1200;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.85rem;
+      cursor: pointer;
+      transition: filter var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+      position: relative; overflow: hidden;
+    }
+    button[type="submit"]::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    button[type="submit"]:hover:not(:disabled) {
+      filter: brightness(1.1); transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(201,168,76,0.4);
+    }
+    button[type="submit"]:active:not(:disabled) { transform: translateY(0); }
+    button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(0,0,0,0.2); border-top-color: #1a1200;
+      border-radius: 50%; animation: spinBtn 0.7s linear infinite; margin: 0 auto;
+    }
+    .spinner.show { display: block; }
+    @keyframes spinBtn { to { transform: rotate(360deg); } }
+
+    .terms {
+      font-size: 0.7rem; color: rgba(255,255,255,0.28);
+      text-align: center; margin-top: 1.1rem; line-height: 1.55;
+      opacity: 0; animation: fadeUp 0.5s 0.95s both;
+    }
+
+    /* Success */
+    .success { display: none; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+    .success.show { display: flex; }
+    .check-circle {
+      width: 64px; height: 64px;
+      background: rgba(46,184,92,0.12);
+      border: 1px solid rgba(46,184,92,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: popIn 0.5s cubic-bezier(0.2,0.8,0.2,1) both;
+    }
+    @keyframes popIn { from { transform: scale(0.5); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .check-circle svg { width: 30px; height: 30px; stroke: #5edb8a; }
+    .success h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; }
+    .success p  { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .progress-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #5edb8a);
+      border-radius: 99px;
+      animation: progress 4s linear forwards;
+    }
+    @keyframes progress { from { width:0; } to { width:100%; } }
+
+    .footer { margin-top: 2rem; text-align: center; font-size: 0.65rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-lines"></div>
+
+  <div class="page">
+    <div class="card">
+
+      <div class="logo-wrap">
+        <img src="https://vr506.com/assets/logoPT.png" alt="Parque Tempisque" onerror="this.style.display='none'" />
+      </div>
+
+      <p class="eyebrow">WiFi · Salón de Eventos</p>
+      <h1 class="title">Bienvenido a<br>Parque Tempisque</h1>
+      <p class="subtitle">Registra tus datos para activar el acceso a internet.</p>
+
+      <div class="divider"><span>Acceso gratuito</span></div>
+
+      <div id="formSection">
+        <form class="form" id="wifiForm" novalidate>
+
+          <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <div class="input-wrap" id="wrapNombre">
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" />
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <span class="hint info" id="hintNombre"></span>
+          </div>
+
+          <div class="field">
+            <label for="email">Correo electrónico</label>
+            <div class="input-wrap" id="wrapEmail">
+              <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email" />
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+              </svg>
+            </div>
+            <span class="hint info" id="hintEmail">Ingresa tu correo real</span>
+          </div>
+
+          <div class="field">
+            <label for="telefono">Teléfono</label>
+            <div class="input-wrap" id="wrapTelefono">
+              <input type="tel" id="telefono" name="telefono" placeholder="+506 8888-8888" autocomplete="tel" />
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 2.08 4.18 2 2 0 0 1 4.05 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <span class="hint info" id="hintTelefono"></span>
+          </div>
+
+          <div class="btn-wrap">
+            <button type="submit" id="btnSubmit">
+              <span id="btnText">Activar acceso WiFi</span>
+              <div class="spinner" id="btnSpinner"></div>
+            </button>
+          </div>
+        </form>
+
+        <p class="terms">Al registrarte aceptas el uso de tus datos únicamente para el control de acceso a la red de Parque Tempisque. Tus datos no serán compartidos con terceros.</p>
+      </div>
+
+      <div class="success" id="successSection">
+        <div class="check-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2>¡Acceso activado!</h2>
+        <p id="successMsg">Ya puedes navegar libremente.<br>Serás redirigido en unos segundos…</p>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+      </div>
+
+    </div>
+
+    <div class="footer">Parque Tempisque · Red privada de uso exclusivo para visitantes</div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════
+    // CONFIG — completar antes de deploy
+    // ═══════════════════════════════════════
+    const SUPABASE_URL     = 'https://vcdgurkuoqsdvwvpnevr.supabase.co';
+    const SUPABASE_ANON    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZGd1cmt1b3FzZHZ3dnBuZXZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MjYxNDQsImV4cCI6MjA4ODMwMjE0NH0._fC7LXnggqXyniyOAb2orZj-QHY1_Xrf_-FnKVju9S8';           // supabase.com -> Settings -> API
+    const ABSTRACT_API_KEY = 'a29d615fe6c5440bab5397f02b3985cd';   // app.abstractapi.com -> Email Validation
+    const TABLE_NAME       = 'wifi_registros';
+    const REDIRECT_DELAY   = 4000;
+
+    // ═══════════════════════════════════════
+    // RUIJIE PARAMS — inyectados en la URL
+    // ?redirect=URL&mac=XX:XX:XX&ip=X.X.X.X
+    // ═══════════════════════════════════════
+    const params      = new URLSearchParams(window.location.search);
+    const redirectUrl = params.get('redirect') || params.get('userurl') || 'http://parquetempisque.com';
+    const clientMac   = params.get('mac')   || params.get('wlanac')     || '';
+    const clientIp    = params.get('ip')    || '';
+    const apMac       = params.get('apmac') || params.get('gatewayMac') || '';
+
+    // ═══════════════════════════════════════
+    // VALIDACIONES LOCALES
+    // ═══════════════════════════════════════
+    function isValidFormat(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    }
+    function isValidPhone(phone) {
+      const c = phone.replace(/[\s\-()+.]/g, '');
+      return c.length >= 7 && /^\d+$/.test(c);
+    }
+
+    // ═══════════════════════════════════════
+    // ABSTRACT API — verificación real SMTP
+    // Cache para no repetir llamadas
+    // ═══════════════════════════════════════
+    const emailCache = {};
+
+    async function verifyEmail(email) {
+      if (emailCache[email]) return emailCache[email];
+
+      try {
+        const r = await fetch(
+          'https://emailvalidation.abstractapi.com/v1/?api_key=' + ABSTRACT_API_KEY + '&email=' + encodeURIComponent(email)
+        );
+        if (!r.ok) throw new Error('api_error');
+        const d = await r.json();
+
+        let res;
+        if (d.is_disposable_email && d.is_disposable_email.value === true) {
+          res = { ok: false, msg: 'Correo temporal no permitido. Usa tu correo real.' };
+        } else if (d.deliverability === 'UNDELIVERABLE') {
+          res = { ok: false, msg: 'Este correo no existe. Verifica e intenta de nuevo.' };
+        } else if (d.deliverability === 'DELIVERABLE') {
+          res = { ok: true, msg: 'Correo verificado' };
+        } else {
+          // RISKY o UNKNOWN: aceptar, no bloquear
+          res = { ok: true, msg: 'Correo aceptado' };
+        }
+
+        emailCache[email] = res;
+        return res;
+
+      } catch (e) {
+        // Si la API no responde, no bloqueamos al usuario
+        const fallback = { ok: true, msg: 'Correo aceptado', fallback: true };
+        emailCache[email] = fallback;
+        return fallback;
+      }
+    }
+
+    // ═══════════════════════════════════════
+    // DOM
+    // ═══════════════════════════════════════
+    const inpNombre   = document.getElementById('nombre');
+    const inpEmail    = document.getElementById('email');
+    const inpTelefono = document.getElementById('telefono');
+    const wrapEmail   = document.getElementById('wrapEmail');
+    const hintNombre  = document.getElementById('hintNombre');
+    const hintEmail   = document.getElementById('hintEmail');
+    const hintTelefono= document.getElementById('hintTelefono');
+
+    function hint(el, type, msg) {
+      el.textContent = msg;
+      el.className = 'hint ' + type;
+    }
+    function state(inp, s) {
+      inp.classList.remove('valid', 'invalid');
+      if (s) inp.classList.add(s);
+    }
+    function setChecking(on) {
+      if (on) wrapEmail.classList.add('input-checking');
+      else    wrapEmail.classList.remove('input-checking');
+    }
+
+    // ═══════════════════════════════════════
+    // LIVE VALIDATION
+    // ═══════════════════════════════════════
+    inpNombre.addEventListener('blur', () => {
+      const v = inpNombre.value.trim();
+      if (!v || v.length < 3) { state(inpNombre,'invalid'); hint(hintNombre,'err','Ingresa tu nombre completo.'); return; }
+      state(inpNombre,'valid'); hint(hintNombre,'ok','');
+    });
+
+    // Mientras escribe: solo formato
+    inpEmail.addEventListener('input', () => {
+      const v = inpEmail.value.trim();
+      if (!v) { state(inpEmail,null); hint(hintEmail,'info','Ingresa tu correo real'); return; }
+      if (!isValidFormat(v)) { state(inpEmail,'invalid'); hint(hintEmail,'err','Formato inválido.'); return; }
+      state(inpEmail,null); hint(hintEmail,'info','');
+    });
+
+    // Al salir del campo: verificar con Abstract API
+    inpEmail.addEventListener('blur', async () => {
+      const v = inpEmail.value.trim();
+      if (!v || !isValidFormat(v)) return;
+      setChecking(true);
+      hint(hintEmail,'info','Verificando correo...');
+      const res = await verifyEmail(v);
+      setChecking(false);
+      if (res.ok) { state(inpEmail,'valid'); hint(hintEmail,'ok','Correo verificado'); }
+      else        { state(inpEmail,'invalid'); hint(hintEmail,'err', res.msg); }
+    });
+
+    inpTelefono.addEventListener('blur', () => {
+      const v = inpTelefono.value.trim();
+      if (!v || !isValidPhone(v)) { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); return; }
+      state(inpTelefono,'valid'); hint(hintTelefono,'ok','');
+    });
+
+    // ═══════════════════════════════════════
+    // SUPABASE
+    // ═══════════════════════════════════════
+    async function saveToSupabase(data) {
+      const r = await fetch(SUPABASE_URL + '/rest/v1/' + TABLE_NAME, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON,
+          'Authorization': 'Bearer ' + SUPABASE_ANON,
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!r.ok) throw new Error(await r.text());
+    }
+
+    // ═══════════════════════════════════════
+    // SUBMIT
+    // ═══════════════════════════════════════
+    document.getElementById('wifiForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const nombre   = inpNombre.value.trim();
+      const email    = inpEmail.value.trim();
+      const telefono = inpTelefono.value.trim();
+
+      // Validaciones locales
+      let err = false;
+      if (!nombre || nombre.length < 3) { state(inpNombre,'invalid'); hint(hintNombre,'err','Ingresa tu nombre completo.'); err = true; }
+      if (!isValidFormat(email))        { state(inpEmail,'invalid');  hint(hintEmail,'err','Ingresa un correo válido.');    err = true; }
+      if (!isValidPhone(telefono))      { state(inpTelefono,'invalid'); hint(hintTelefono,'err','Ingresa un número válido.'); err = true; }
+      if (err) return;
+
+      // UI loading
+      const btn     = document.getElementById('btnSubmit');
+      const btnTxt  = document.getElementById('btnText');
+      const spinner = document.getElementById('btnSpinner');
+      btnTxt.style.display = 'none';
+      spinner.classList.add('show');
+      btn.disabled = true;
+
+      try {
+        // 1. Verificar correo (usa cache si ya se hizo en blur)
+        setChecking(true);
+        hint(hintEmail,'info','Verificando correo...');
+        const emailRes = await verifyEmail(email);
+        setChecking(false);
+
+        if (!emailRes.ok) {
+          state(inpEmail,'invalid');
+          hint(hintEmail,'err', emailRes.msg);
+          btnTxt.style.display = 'block';
+          spinner.classList.remove('show');
+          btn.disabled = false;
+          return;
+        }
+
+        hint(hintEmail,'ok','Correo verificado');
+        state(inpEmail,'valid');
+
+        // 2. Guardar en Supabase
+        await saveToSupabase({
+          id:         Date.now(),
+          nombre:     nombre,
+          email:      email,
+          telefono:   telefono,
+          mac:        clientMac,
+          ip:         clientIp,
+          ap_mac:     apMac,
+          portal:     'salon_eventos',
+          created_at: new Date().toISOString(),
+        });
+
+        // 3. Pantalla de éxito
+        document.getElementById('formSection').style.display = 'none';
+        const s = document.getElementById('successSection');
+        s.classList.add('show');
+        document.getElementById('successMsg').innerHTML =
+          'Hola <strong>' + nombre.split(' ')[0] + '</strong>! Ya puedes navegar libremente.<br>Seras redirigido en unos segundos...';
+
+        // 4. Redirigir
+        setTimeout(function() { window.location.href = redirectUrl; }, REDIRECT_DELAY);
+
+      } catch (error) {
+        console.error('Error:', error);
+        setChecking(false);
+        btnTxt.style.display = 'block';
+        spinner.classList.remove('show');
+        btn.disabled = false;
+        hint(hintEmail,'err','Error al registrar. Intenta de nuevo.');
+      }
+    });
+  </script>
+</body>
+</html>
